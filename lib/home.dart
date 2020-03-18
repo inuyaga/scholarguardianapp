@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:scholarguardian/pages/pageprofile.dart';
 
+import 'pages/pageEvent.dart';
+import 'pages/pageLocation.dart';
+import 'pages/pagePay.dart';
 import 'pages/pagealumno.dart';
 
 class Home extends StatelessWidget {
@@ -21,14 +24,29 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
   int pageIndex = 4;
-  final PageProfile profile = PageProfile();
   final PageAlumno alumno = PageAlumno();
+  final PageEvent alumnEvent = PageEvent();
+  final PageLocation location = PageLocation();
+  final PagePay paystatus = PagePay();
+  final PageProfile profile = PageProfile();
   GlobalKey _bottomNavigationKey = GlobalKey();
   Widget _showPage = PageProfile();
   Widget _pageChooser(int page){
     switch (page) {
       case 0:
       return alumno;
+      break;
+      
+      case 1:
+      return alumnEvent;
+      break;
+
+      case 2:
+      return location;
+      break;
+
+      case 3:
+      return paystatus;
       break;
 
       case 4:
@@ -48,7 +66,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           items: <Widget>[
             Icon(Icons.person_add, size: 30),
             Icon(Icons.list, size: 30),
-            Icon(Icons.compare_arrows, size: 30),
+            Icon(Icons.location_on, size: 30),
             Icon(Icons.credit_card, size: 30),
             Icon(Icons.settings, size: 30),
           ],
