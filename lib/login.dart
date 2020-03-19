@@ -144,8 +144,7 @@ class FormLoginViewState extends State<FormLoginView> {
                             json.decode(response.body);
                         tokenJson = responseJson['token'];
                         guardarToken();
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Home()));
+                        Navigator.push(context,MaterialPageRoute(builder: (context) => Home()));
                       }
                     }
                   },

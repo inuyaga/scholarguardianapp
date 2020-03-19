@@ -6,6 +6,7 @@ import 'package:scholarguardian/constantes.dart' as constantes;
 import 'package:http/http.dart' as http;
 
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:scholarguardian/pages/addChildAlumno.dart';
 
 
 
@@ -144,7 +145,9 @@ class PageAlumno extends StatelessWidget {
       backgroundColor: Colors.transparent,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blueAccent,
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context,MaterialPageRoute(builder: (context) => AddChildAlumno()));
+        },
         child: Icon(Icons.person_add),
       ),
     );
@@ -159,10 +162,12 @@ class PageAlumno extends StatelessWidget {
     var url = constantes.URL_SERVER + 'ctr/app/v1/app/get/alumnos/info/';
     final response = await http.get(url, headers: {
       HttpHeaders.authorizationHeader: 'Token $token',
+      HttpHeaders.contentTypeHeader: 'application/json',
     });
 
-    var responseJson = json.decode(response.body);
     List<Hijo> hijos = [];
+    if (response.statusCode == 200) {
+    var responseJson = json.decode(utf8.decode(response.bodyBytes));
     for (var item in responseJson) {
       Hijo hijo = Hijo(
           item['id'],
@@ -176,6 +181,7 @@ class PageAlumno extends StatelessWidget {
           item['al_salida_init'],
           item['al_dalida_end']);
       hijos.add(hijo);
+    }
     }
     return hijos;
   }

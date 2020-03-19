@@ -54,9 +54,10 @@ class FormProfileState extends State<FormProfile> {
     var url = constantes.URL_SERVER + 'ctr/app/v1/app/get/user/info/';
     final response = await http.get(url, headers: {
       HttpHeaders.authorizationHeader: 'Token $token',
+      HttpHeaders.contentTypeHeader: 'application/json',
     });
     if (response.statusCode == 200) {
-      Map<String, dynamic> responseJson = json.decode(response.body);
+      Map<String, dynamic> responseJson = json.decode(utf8.decode(response.bodyBytes));
       objuser.nombre = responseJson['first_name'];
       objuser.apellido = responseJson['last_name'];
       objuser.email = responseJson['email'];
