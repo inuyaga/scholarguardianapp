@@ -107,8 +107,7 @@ class FormRegisterUserState extends State<FormRegisterUser> {
                     if (_formKey.currentState.validate()) {
                       _formKey.currentState.save();
 
-                      var url =
-                          constantes.URL_SERVER + 'ctr/app/v1/app/register/';
+                      var url = constantes.URL_SERVER + 'ctr/app/v1/app/register/';
                       var response = await http.post(url, body: {
                         'first_name': userData.nombre,
                         'last_name': userData.apellido,

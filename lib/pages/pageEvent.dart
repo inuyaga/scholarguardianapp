@@ -37,10 +37,10 @@ class PageEventState extends State<PageEvent> {
                     Color colorinfo;
                     switch (snap.data[index].asistipoevento) {
                       case 'Entrada':
-                      colorinfo = Colors.indigoAccent[100];                        
+                      colorinfo = Colors.greenAccent[100];                        
                         break;
                       case 'Salida':
-                      colorinfo = Colors.greenAccent[100];                        
+                      colorinfo = Colors.indigoAccent[100];                        
                         break;
                       default:
                       colorinfo = Colors.white;    

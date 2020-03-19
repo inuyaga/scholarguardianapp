@@ -188,16 +188,16 @@ class PageAlumno extends StatelessWidget {
 }
 
 class Hijo {
-  final int id;
-  final String nombres;
-  final String apellido;
-  final String foto;
-  final String correo;
-  final String colegio;
-  final String entradaInit;
-  final String entradaTolerancia;
-  final String salidaInit;
-  final String salidaTolerancia;
+  int id;
+  String nombres;
+  String apellido;
+  String foto;
+  String correo;
+  String colegio;
+  String entradaInit;
+  String entradaTolerancia;
+  String salidaInit;
+  String salidaTolerancia;
 
   Hijo(
       this.id,
