@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:scholarguardian/obj/objUser.dart';
+import 'package:scholarguardian/obj/objs.dart';
 import 'package:scholarguardian/constantes.dart' as constantes;
 import 'package:http/http.dart' as http;
 import 'package:scholarguardian/obj/tokensesion.dart';
