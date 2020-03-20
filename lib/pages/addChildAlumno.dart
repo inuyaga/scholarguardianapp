@@ -205,6 +205,7 @@ class AddChildAlumnoState extends State<AddChildAlumno> {
                     child: FlatButton(
                         onPressed: () async {
                           if (_formKey.currentState.validate()) {
+                            _formKey.currentState.save();
                             // Si el formulario es válido, muestre un snackbar. En el mundo real, a menudo
                             // desea llamar a un servidor o guardar la información en una base de datos
                             pr = new ProgressDialog(context,
@@ -219,7 +220,7 @@ class AddChildAlumnoState extends State<AddChildAlumno> {
                               token = val;
                             });
                             var url = constantes.URL_SERVER +
-                                'ctr/app/v1/app/get/alumnos/info/';
+                                'ctr/app/v1/app/add/alumnos/';
                             final response = await http.post(url, headers: {
                               HttpHeaders.authorizationHeader: 'Token $token',
                             }, body: {
@@ -233,13 +234,17 @@ class AddChildAlumnoState extends State<AddChildAlumno> {
                               'al_salida_init': hijo.salidaInit,
                               'al_dalida_end': hijo.salidaTolerancia,
                             });
+                            
                             if (response.statusCode == 201) {
+                              pr.hide().then((isHidden) {
+                                print(isHidden);
+                              });
                             } else {
                               pr.hide().then((isHidden) {
                                 print(isHidden);
                               });
                               Map<String, dynamic> responseJson =
-                                  json.decode(response.body);
+                                  json.decode(utf8.decode(response.bodyBytes));
                               String msn = "";
                               // responseJson.forEach((k, v) => msn += ""));
                               // responseJson.forEach((k,v)=>msn += v+"\n");
