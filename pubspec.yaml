@@ -26,6 +26,7 @@ dependencies:
   datetime_picker_formfield: ^1.0.0
   image_picker: ^0.6.3+4
   progress_dialog: ^1.2.1
+  google_maps_flutter: ^0.5.25
   
   
 

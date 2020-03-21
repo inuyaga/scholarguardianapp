@@ -29,11 +29,21 @@ class AddChildAlumnoState extends State<AddChildAlumno> {
   String base64Image;
   File tmpFile;
   String errMessage = 'Error Uploading Image';
-  String selected_colegio = "Uno";
+  String seleccion = '0';
+
+  setselection(String val){
+    seleccion = val;
+    print(seleccion);
+  }
+
+
+  
   @override
   Widget build(BuildContext context) {
     pr = new ProgressDialog(context);
     final _formKey = GlobalKey<FormState>();
+    
+    
 
     return Scaffold(
         appBar: AppBar(
@@ -101,7 +111,7 @@ class AddChildAlumnoState extends State<AddChildAlumno> {
                     ),
                   )),
                   Center(
-                    child: selectedColegio(),
+                    child: SelectedColegioWidget(parentAction: setselection,),
                   ),
                   Center(
                       child: Padding(
@@ -228,7 +238,7 @@ class AddChildAlumnoState extends State<AddChildAlumno> {
                               'al_apellidos': hijo.apellido,
                               'al_foto': base64Image,
                               'al_correo': hijo.correo,
-                              'al_colegio': selected_colegio,
+                              'al_colegio': seleccion,
                               'al_entrada_init': hijo.entradaInit,
                               'al_entrada_end': hijo.entradaTolerancia,
                               'al_salida_init': hijo.salidaInit,
@@ -318,6 +328,39 @@ class AddChildAlumnoState extends State<AddChildAlumno> {
     );
   }
 
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+class SelectedColegioWidget extends StatefulWidget{
+  final ValueChanged<String> parentAction;
+  const SelectedColegioWidget({Key key, this.parentAction}) : super(key: key);
+  @override
+  State<StatefulWidget> createState() {
+    return SelectedColegioWidgetState();
+  }
+
+}
+
+
+class SelectedColegioWidgetState extends State<SelectedColegioWidget>{
+  String selected = "1";
+  @override
+  Widget build(BuildContext context) {
+    return selectedColegio();
+  }
+
+ 
+
   Future<List<Colegio>> listColegiosGet() async {
     String token = "";
     await getTokenUser().then((val) {
@@ -330,9 +373,8 @@ class AddChildAlumnoState extends State<AddChildAlumno> {
     List<Colegio> _colegios = [];
     if (response.statusCode == 200) {
       final jsontxt = JsonDecoder().convert(utf8.decode(response.bodyBytes));
-      _colegios =
-          (jsontxt).map<Colegio>((item) => Colegio.fromJson(item)).toList();
-      selected_colegio = _colegios[0].id;
+      _colegios = (jsontxt).map<Colegio>((item) => Colegio.fromJson(item)).toList();
+      widget.parentAction(selected);
       return _colegios;
     } else {
       return _colegios;
@@ -340,9 +382,9 @@ class AddChildAlumnoState extends State<AddChildAlumno> {
   }
 
   changue(String valor) {
-    selected_colegio = valor;
     setState(() {
-      selected_colegio = valor;
+      selected = valor;
+      widget.parentAction(valor);
     });
   }
 
@@ -359,11 +401,12 @@ class AddChildAlumnoState extends State<AddChildAlumno> {
                   value: item.id, child: Text(item.colnombre)));
             }
             return DropdownButton<String>(
-              value: selected_colegio,
+              value: selected,
               items: menu,
               onChanged: changue,
             );
           }
         });
   }
+  
 }
