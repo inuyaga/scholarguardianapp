@@ -34,28 +34,6 @@ class AddChildAlumnoState extends State<AddChildAlumno> {
   Widget build(BuildContext context) {
     pr = new ProgressDialog(context);
     final _formKey = GlobalKey<FormState>();
-    
-
-    Future<List<Colegio>> listColegiosGet() async {
-      String token = "";
-      await getTokenUser().then((val) {
-        token = val;
-      });
-      var url = constantes.URL_SERVER + 'ctr/app/v1/app/colegios/list/';
-      final response = await http.get(url, headers: {
-        HttpHeaders.authorizationHeader: 'Token $token',
-      });
-      List<Colegio> _colegios = [];
-      if (response.statusCode == 200) {
-        final jsontxt = JsonDecoder().convert(utf8.decode(response.bodyBytes));
-        _colegios = (jsontxt).map<Colegio>((item) => Colegio.fromJson(item)).toList();
-        selected_colegio = _colegios[0].id;
-        return _colegios;
-      } else {
-        return _colegios;
-      }
-    }
-    
 
     return Scaffold(
         appBar: AppBar(
@@ -123,28 +101,7 @@ class AddChildAlumnoState extends State<AddChildAlumno> {
                     ),
                   )),
                   Center(
-                    child: FutureBuilder(
-                        future: listColegiosGet(),
-                        builder:(BuildContext context, AsyncSnapshot snapshot) {
-                          if (!snapshot.hasData) {
-                            return Text("Loanding data");
-                          } else {
-                            List<DropdownMenuItem<String>> menu =[];
-                            for (var item in snapshot.data) {
-                              menu.add(DropdownMenuItem(
-                              value: item.id,
-                              child: Text(item.colnombre)
-                              ));
-                            }
-                           return DropdownButton<String>(
-                             value: "1",                             
-                             items: menu, 
-                             onChanged: (String value) {
-                                 print(value);
-                             },
-                           );
-                          }
-                        }),
+                    child: selectedColegio(),
                   ),
                   Center(
                       child: Padding(
@@ -248,6 +205,7 @@ class AddChildAlumnoState extends State<AddChildAlumno> {
                     child: FlatButton(
                         onPressed: () async {
                           if (_formKey.currentState.validate()) {
+                            _formKey.currentState.save();
                             // Si el formulario es válido, muestre un snackbar. En el mundo real, a menudo
                             // desea llamar a un servidor o guardar la información en una base de datos
                             pr = new ProgressDialog(context,
@@ -262,7 +220,7 @@ class AddChildAlumnoState extends State<AddChildAlumno> {
                               token = val;
                             });
                             var url = constantes.URL_SERVER +
-                                'ctr/app/v1/app/get/alumnos/info/ ';
+                                'ctr/app/v1/app/add/alumnos/';
                             final response = await http.post(url, headers: {
                               HttpHeaders.authorizationHeader: 'Token $token',
                             }, body: {
@@ -270,11 +228,14 @@ class AddChildAlumnoState extends State<AddChildAlumno> {
                               'al_apellidos': hijo.apellido,
                               'al_foto': base64Image,
                               'al_correo': hijo.correo,
-                              // 'al_colegio': hijo.,
+                              'al_colegio': selected_colegio,
                               'al_entrada_init': hijo.entradaInit,
                               'al_entrada_end': hijo.entradaTolerancia,
                               'al_salida_init': hijo.salidaInit,
                               'al_dalida_end': hijo.salidaTolerancia,
+                            });
+                            pr.hide().then((isHidden) {
+                              print(isHidden);
                             });
                             if (response.statusCode == 201) {
                             } else {
@@ -355,5 +316,54 @@ class AddChildAlumnoState extends State<AddChildAlumno> {
         }
       },
     );
+  }
+
+  Future<List<Colegio>> listColegiosGet() async {
+    String token = "";
+    await getTokenUser().then((val) {
+      token = val;
+    });
+    var url = constantes.URL_SERVER + 'ctr/app/v1/app/colegios/list/';
+    final response = await http.get(url, headers: {
+      HttpHeaders.authorizationHeader: 'Token $token',
+    });
+    List<Colegio> _colegios = [];
+    if (response.statusCode == 200) {
+      final jsontxt = JsonDecoder().convert(utf8.decode(response.bodyBytes));
+      _colegios =
+          (jsontxt).map<Colegio>((item) => Colegio.fromJson(item)).toList();
+      selected_colegio = _colegios[0].id;
+      return _colegios;
+    } else {
+      return _colegios;
+    }
+  }
+
+  changue(String valor) {
+    selected_colegio = valor;
+    setState(() {
+      selected_colegio = valor;
+    });
+  }
+
+  Widget selectedColegio() {
+    return FutureBuilder(
+        future: listColegiosGet(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (!snapshot.hasData) {
+            return Text("Loanding data");
+          } else {
+            List<DropdownMenuItem<String>> menu = [];
+            for (var item in snapshot.data) {
+              menu.add(DropdownMenuItem(
+                  value: item.id, child: Text(item.colnombre)));
+            }
+            return DropdownButton<String>(
+              value: selected_colegio,
+              items: menu,
+              onChanged: changue,
+            );
+          }
+        });
   }
 }
