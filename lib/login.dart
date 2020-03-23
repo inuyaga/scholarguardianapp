@@ -181,7 +181,7 @@ class FormLoginViewState extends State<FormLoginView> {
                             child: Text("Crear cuenta")),
                         FlatButton(
                             onPressed: () {},
-                            child: Text("¡Olvide mi cuenta!")),
+                            child: Text("¡Soy alumno!")),
                       ],
                     ),
                   )),
