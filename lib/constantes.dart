@@ -1,5 +1,5 @@
 library constants;
 
-const String DNS="192.168.1.243";
+const String DNS="f05e02fb.ngrok.io";
 const String URL_SERVER="http://$DNS/";
 const String URL_SERVER_RAW="http://$DNS";
