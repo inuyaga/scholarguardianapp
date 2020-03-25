@@ -122,7 +122,9 @@ class PageAlumno extends StatelessWidget {
                                                       decoration: BoxDecoration(
                                                         color: Colors.white
                                                       ),
-                                                      child: QrImage(data: snap.data[index].id.toString()),
+                                                      child: QrImage(
+                                                        version: 3,
+                                                        data: snap.data[index].id.toString()),
                                                     ),
                                                   ),
                                                 );

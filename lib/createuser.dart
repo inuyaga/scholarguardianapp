@@ -7,20 +7,12 @@ import 'constantes.dart' as constantes;
 class CreateUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Registro',
-        theme: ThemeData(primarySwatch: Colors.teal),
-        home: Scaffold(
+    return Scaffold(
           appBar: AppBar(
-            leading: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                }),
             title: Text("Registro"),
           ),
           body: FormRegisterUser(),
-        ));
+        );
   }
 }
 

@@ -8,6 +8,8 @@ import 'dart:convert';
 import 'home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'login/scanalumno.dart';
+
 var IgmLogo = AssetImage("assets/scholarguardian.png");
 var logo = Image(image: IgmLogo);
 
@@ -180,7 +182,9 @@ class FormLoginViewState extends State<FormLoginView> {
                             },
                             child: Text("Crear cuenta")),
                         FlatButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              qrScanAlumno(context);
+                            },
                             child: Text("¡Soy alumno!")),
                       ],
                     ),
@@ -199,4 +203,8 @@ class FormLoginViewState extends State<FormLoginView> {
 registernavigateview(BuildContext context) async {
   final result = await Navigator.push(
       context, MaterialPageRoute(builder: (context) => CreateUser()));
+}
+qrScanAlumno(BuildContext context) async {
+  final result = await Navigator.push(
+      context, MaterialPageRoute(builder: (context) => QrScan()));
 }
