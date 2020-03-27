@@ -15,7 +15,7 @@ class HomeAlumno extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Scholarguardian',
+      title: 'Scholar Guardian',
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
@@ -38,7 +38,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     Text(
-      'Index 0: Home',
+      'Index 0: Casa',
       style: optionStyle,
     ),
     Text(
@@ -61,7 +61,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text("Scholarguardian"),),
+        title: Center(child: Text("Scholar Guardian"),),
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),

@@ -7,3 +7,9 @@ Future<String> getTokenUser() async {
     String token = preferencias.getString("token") ?? "";
     return token;
 }
+
+
+  void saveIdAlumno(String iDUserAlumno) async {
+    SharedPreferences preferencias = await SharedPreferences.getInstance();
+    preferencias.setString("IDUserAlumno", iDUserAlumno);
+  }

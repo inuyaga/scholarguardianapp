@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/services.dart';
 import 'package:scholarguardian/login/homeAlumno.dart';
+import 'package:scholarguardian/obj/tokensesion.dart';
 
 var IgmLogo = AssetImage("assets/barcode.png");
-var logo = Image(image: IgmLogo,);
+var logo = Image(
+  image: IgmLogo,
+);
+
 class QrScan extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -29,30 +33,28 @@ class QrScanState extends State<QrScan> {
                 width: 80,
                 height: 80,
                 child: logo,
-                ),
+              ),
               SizedBox(
                 height: 20,
               ),
-               Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 80, vertical: 10.0),
-                      child: RaisedButton(
-                        color: Colors.amber,
-                        textColor: Colors.black,
-                        splashColor: Colors.blueGrey,
-                        onPressed: scan,
-                        child: const Text('Scanear el código QR.'),
-                      ),
-                    ),
-                  Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                      child: Text(
-                        _barcode,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 80, vertical: 10.0),
+                child: RaisedButton(
+                  color: Colors.amber,
+                  textColor: Colors.black,
+                  splashColor: Colors.blueGrey,
+                  onPressed: scan,
+                  child: const Text('Scanear el código QR.'),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: Text(
+                  _barcode,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
             ],
           ),
         ));
@@ -61,8 +63,15 @@ class QrScanState extends State<QrScan> {
   Future scan() async {
     try {
       String barcode = await BarcodeScanner.scan();
-      setState(() => this._barcode = barcode);
-      Navigator.push(context,MaterialPageRoute(builder: (context) => HomeAlumno()));
+      try {
+        var n = int.parse(barcode);
+        saveIdAlumno(n.toString());
+        setState(() => this._barcode = barcode);
+        Navigator.push(context, MaterialPageRoute(builder: (context) => HomeAlumno()));
+      } on FormatException {
+        this._barcode = 'QR Incorrecto!';
+      }
+      
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
         setState(() {
@@ -78,5 +87,4 @@ class QrScanState extends State<QrScan> {
       setState(() => this._barcode = 'Error desconocido : $e');
     }
   }
-
 }

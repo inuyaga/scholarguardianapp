@@ -11,42 +11,47 @@ import 'package:scholarguardian/login.dart';
 class PageProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return FormProfile();
+    return ProfileWigget();
   }
 }
 
-class FormProfile extends StatefulWidget {
+
+
+
+class ProfileWigget extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return FormProfileState();
+    return ProfileWiggetState();
   }
+
 }
 
-class FormProfileState extends State<FormProfile> {
+class ProfileWiggetState extends State<ProfileWigget>{
   ObjUser objuser = ObjUser();
-  Future<String> foto;
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      getinfoperfil();
-    });
-    return Container(
-        child: FutureBuilder(
-            future: getinfoperfil(),
-            builder: (context, AsyncSnapshot<Widget> snap) {
-              if (!snap.hasData) {
-                return Center(
+    return 
+        FutureBuilder(
+          future: profileWiget(),
+          builder: (BuildContext context, AsyncSnapshot snapshot){
+            if (!snapshot.hasData) {
+              return Center(
                   child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.redAccent),
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.greenAccent),
                   ),
                 );
-              }
-              return snap.data;
-            }));
+            }else{
+              return snapshot.data;
+            }
+          }
+        );
   }
 
-  Future<Widget> getinfoperfil() async {
-    String token = "";
+
+
+  Future<Widget> profileWiget() async {
+
+     String token = "";
     await getTokenUser().then((val) {
       token = val;
     });
@@ -69,57 +74,130 @@ class FormProfileState extends State<FormProfile> {
 
     return ListView(
       children: <Widget>[
-        Card(
-          child: ListTile(
-              title: Text(objuser.nombre + " " + objuser.apellido),
-              subtitle: Text(objuser.email),
-              onTap: () {},
-              leading: ClipOval(
-                child: Image(
-                  height: 80.0,
-                  width: 60.0,
-                  image: NetworkImage(objuser.fotoperfil),
-                  fit: BoxFit.fill,
+        Stack(
+          overflow: Overflow.visible,
+        children: <Widget>[
+          ClipRRect(
+            borderRadius: BorderRadius.only(bottomRight: Radius.circular(150)),
+            child: Image(
+              width: MediaQuery.of(context).size.width,
+              fit: BoxFit.contain,
+              image: NetworkImage(objuser.fotoperfil)),
+          
+          ),
+          Positioned(
+            bottom: 50,
+            left: 30,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(objuser.nombre, style: TextStyle(fontSize: 30, color: Colors.white,
+                shadows: [Shadow(color: Colors.black87.withOpacity(0.5), blurRadius: 0.1, offset: Offset(3, 3))]),
                 ),
-              )),
-        ),
-        Card(
-          child: ListTile(
-            leading: Icon(Icons.person),
-            title: Text(objuser.usuario),
-            subtitle: Text("Usuario"),
-          ),
-        ),
-        Card(
-          child: ListTile(
-            leading: Icon(Icons.date_range),
-            title: Text(objuser.fechanacimiento),
-            subtitle: Text("Fecha nacimiento"),
-          ),
-        ),
-        Card(
-          child: ListTile(
-            leading: Icon(Icons.phone),
-            title: Text(objuser.telefono),
-            subtitle: Text("Telefono"),
-          ),
-        ),
-        Center(
-          child: FlatButton(
-              color: Colors.white,
+                Text(objuser.apellido, style: TextStyle(fontSize: 30, color: Colors.white,
+                shadows: [Shadow(color: Colors.black87.withOpacity(0.5), blurRadius: 0.1, offset: Offset(3, 3))]),
+                ),
+              ],
+            )
+            ),
+          Positioned(
+            bottom: -25,
+            left: MediaQuery.of(context).size.width / 10,
+            child: FlatButton(
+              onPressed: (){}, child: Text("Configuraciones", style: TextStyle(color: Colors.white),),
+              color: Color(0xFF004D40),
               shape: StadiumBorder(),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginView()),
-                );
-              },
-              child: Text("Cerrar sesion")),
-        )
+              )
+              ),
+        ],
+      ),
+
+      Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(13)
+        ),
+         margin: EdgeInsets.only(top: 30, left: 10, right: 10),
+         padding: EdgeInsets.only(top: 20, bottom: 20),
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                SizedBox(
+                  width: (MediaQuery.of(context).size.width/2)-10,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(padding: EdgeInsets.only(left: 30),
+                      child: Text("Telefono", style: TextStyle(color: Colors.grey, fontSize: 13),),
+                      ),
+                      Padding(padding: EdgeInsets.only(left: 30),
+                      child: Text(objuser.telefono, style: TextStyle(fontWeight: FontWeight.bold),),
+                      ),
+                      
+                    ],
+                  ),
+                ),                
+                SizedBox(
+                  width: (MediaQuery.of(context).size.width/2)-10,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text("Fecha nacimiento", style: TextStyle(color: Colors.grey, fontSize: 13),),
+                      Text(objuser.fechanacimiento, style: TextStyle(fontWeight: FontWeight.bold),),
+                    ],
+                  ),
+                ),                
+                              
+              ],
+            ),
+            Padding(padding: EdgeInsets.only(top: 20),
+            child: Row(
+              children: <Widget>[
+                SizedBox(
+                  width: (MediaQuery.of(context).size.width/2)-10,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(padding: EdgeInsets.only(left: 30),
+                      child: Text("Email",style: TextStyle(color: Colors.grey, fontSize: 13),),
+                      ),
+                      Padding(padding: EdgeInsets.only(left: 30),
+                      child: Text(objuser.email, style: TextStyle(fontWeight: FontWeight.bold),),
+                      ),
+                      
+                    ],
+                  ),
+                ),                
+                SizedBox(
+                  width: (MediaQuery.of(context).size.width/2)-10,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text("Tipo",style: TextStyle(color: Colors.grey, fontSize: 13),),
+                      Text("Basico", style: TextStyle(fontWeight: FontWeight.bold),),
+                    ],
+                  ),
+                ),                
+                              
+              ],
+            ),
+            )
+          ],
+        ),
+      )
+
       ],
-    );
+    ); 
+
   }
+
 }
+
+
+
+
+
 
 String formatJsontoString(String data) {
   if (data == null) {
