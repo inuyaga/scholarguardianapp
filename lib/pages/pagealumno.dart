@@ -17,7 +17,7 @@ class PageAlumno extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Alumnos"),
-        backgroundColor: Colors.transparent,
+        // backgroundColor: Colors.transparent,
       ),
       body: FutureBuilder(
           future: getHijos(),
@@ -36,10 +36,16 @@ class PageAlumno extends StatelessWidget {
                       child: ListTile(
                         leading: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: Image.network(snap.data[index].foto),
+                          child: Image(
+                            image: NetworkImage(snap.data[index].foto),
+                            width: 50,
+                            fit: BoxFit.fill,
+                            ),
                         ),
                         title: Text(
-                            "${snap.data[index].nombres} ${snap.data[index].apellido}"),
+                            "${snap.data[index].nombres} ${snap.data[index].apellido}",
+                            style: TextStyle(fontFamily:'Raleway'),
+                            ),
                         onTap: () {
                           showModalBottomSheet(
                               context: context,
@@ -144,9 +150,9 @@ class PageAlumno extends StatelessWidget {
                   });
             }
           }),
-      backgroundColor: Colors.transparent,
+      // backgroundColor: Colors.transparent,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blueAccent,
+      
         onPressed: () {
           Navigator.push(context,MaterialPageRoute(builder: (context) => AddChildAlumno()));
         },

@@ -26,7 +26,9 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'ScholarGuardian',
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        primaryColor: Color(0xFF0087a2),
+        primarySwatch: Colors.blue,
+        accentColor: Color(0xFF00b8d4)
       ),
       home: FutureBuilder(
           future: obtenerpreferenciainit(),

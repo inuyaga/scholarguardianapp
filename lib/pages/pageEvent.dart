@@ -18,7 +18,7 @@ class PageEventState extends State<PageEvent> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Eventos"),
-        backgroundColor: Colors.transparent,
+        // backgroundColor: Colors.transparent,
       ),
       body: FutureBuilder(
           future: getEventAlumn(),
@@ -37,10 +37,10 @@ class PageEventState extends State<PageEvent> {
                     Color colorinfo;
                     switch (snap.data[index].asistipoevento) {
                       case 'Entrada':
-                      colorinfo = Colors.greenAccent[100];                        
+                      colorinfo = Color(0xFF0091ea);                        
                         break;
                       case 'Salida':
-                      colorinfo = Colors.indigoAccent[100];                        
+                      colorinfo = Color(0xFF0064b7);                        
                         break;
                       default:
                       colorinfo = Colors.white;    
@@ -49,15 +49,16 @@ class PageEventState extends State<PageEvent> {
                     return Card(
                       color: colorinfo,
                       child: ListTile(
-                        leading: Text("${snap.data[index].asistipoevento}", style: TextStyle(fontWeight: FontWeight.bold),),
-                        title: Text("${snap.data[index].asisuser}"),
-                        subtitle: Text("${snap.data[index].asishraevento}"),
+                        leading: Text("${snap.data[index].asistipoevento}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
+                        title: Text("${snap.data[index].asisuser}", style: TextStyle(color: Colors.white),),
+                        subtitle: Text("${snap.data[index].asishraevento}", style: TextStyle(color: Colors.white),),
+                        onTap: (){},
                       ),
                     );
                   });
             }
           }),
-      backgroundColor: Colors.transparent,
+      // backgroundColor: Colors.transparent,
     );
   }
 

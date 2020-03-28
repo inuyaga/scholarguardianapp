@@ -11,10 +11,10 @@ class PagePay extends StatelessWidget{
     return Scaffold(
       appBar: AppBar(
         title: Text("Subcripcion Status"),
-        backgroundColor: Colors.transparent,
+        // backgroundColor: Colors.transparent,
       ),
 
-      backgroundColor: Colors.transparent,
+      // backgroundColor: Colors.transparent,
     );
   }
 

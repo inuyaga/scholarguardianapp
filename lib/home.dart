@@ -10,9 +10,7 @@ import 'pages/pagealumno.dart';
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: BottomNavBar(),
-    );
+    return Scaffold(body: BottomNavBar(),);
   }
   
 }
@@ -72,7 +70,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           ],
           color: Colors.white,
           buttonBackgroundColor: Colors.white,
-          backgroundColor: Colors.greenAccent[200],
+          backgroundColor: Colors.white, 
           animationCurve: Curves.easeInOut,
           animationDuration: Duration(milliseconds: 600),
           onTap: (index) {
@@ -82,11 +80,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           },
         ),
         body: Container(
-          decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.topRight,
-                        end: Alignment.bottomLeft,
-                        colors: [Colors.blue, Colors.greenAccent])),
+          color: Colors.greenAccent,
           child: Center(
             child: _showPage
           ),

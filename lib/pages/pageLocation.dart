@@ -38,7 +38,7 @@ class PageLocationState extends State<PageLocation> {
           title: Text("Ubicaciones"),
           backgroundColor: Colors.transparent,
         ),
-        backgroundColor: Colors.transparent,
+        // backgroundColor: Colors.transparent,
         body: GoogleMap(
           markers: _markers,
           mapType: MapType.normal,
