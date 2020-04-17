@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:scholarguardian/login/homeAlumno.dart';
 import 'package:scholarguardian/obj/objs.dart';
 import 'package:scholarguardian/constantes.dart' as constantes;
 import 'package:http/http.dart' as http;
@@ -226,7 +227,8 @@ class ProfileWiggetState extends State<ProfileWigget> {
                 padding: EdgeInsets.only(top: 15),
                 child: FlatButton(
                   onPressed: () {
-                    Navigator.push(context,MaterialPageRoute(builder: (context) => LoginView()));
+                    // Navigator.push(context,MaterialPageRoute(builder: (context) => LoginView()));
+                    Navigator.push(context,MaterialPageRoute(builder: (context) => HomeAlumno()));
                   }, 
                   child: Text("Salir", 
                   style: TextStyle(color: Colors.black),),
