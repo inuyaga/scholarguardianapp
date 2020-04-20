@@ -227,8 +227,8 @@ class ProfileWiggetState extends State<ProfileWigget> {
                 padding: EdgeInsets.only(top: 15),
                 child: FlatButton(
                   onPressed: () {
-                    // Navigator.push(context,MaterialPageRoute(builder: (context) => LoginView()));
-                    Navigator.push(context,MaterialPageRoute(builder: (context) => HomeAlumno()));
+                    Navigator.push(context,MaterialPageRoute(builder: (context) => LoginView()));
+                    // Navigator.push(context,MaterialPageRoute(builder: (context) => HomeAlumno()));
                   }, 
                   child: Text("Salir", 
                   style: TextStyle(color: Colors.black),),

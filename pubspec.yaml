@@ -27,7 +27,7 @@ dependencies:
   image_picker: ^0.6.3+4
   progress_dialog: ^1.2.1
   google_maps_flutter: ^0.5.25
-  barcode_scan: any
+  barcode_scan: ^2.0.2
   
   
 
