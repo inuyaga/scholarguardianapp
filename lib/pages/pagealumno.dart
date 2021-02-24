@@ -8,9 +8,6 @@ import 'package:http/http.dart' as http;
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:scholarguardian/pages/addChildAlumno.dart';
 
-
-
-
 class PageAlumno extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -40,12 +37,12 @@ class PageAlumno extends StatelessWidget {
                             image: NetworkImage(snap.data[index].foto),
                             width: 50,
                             fit: BoxFit.fill,
-                            ),
+                          ),
                         ),
                         title: Text(
-                            "${snap.data[index].nombres} ${snap.data[index].apellido}",
-                            style: TextStyle(fontFamily:'Raleway'),
-                            ),
+                          "${snap.data[index].nombres} ${snap.data[index].apellido}",
+                          style: TextStyle(fontFamily: 'Raleway'),
+                        ),
                         onTap: () {
                           showModalBottomSheet(
                               context: context,
@@ -77,67 +74,110 @@ class PageAlumno extends StatelessWidget {
                                                 height: 80,
                                               ),
                                             ),
-                                          )), 
-
+                                          )),
                                           Center(
-                                            child: Text("Colegio de Estudios",
-                                            style: TextStyle(fontWeight: FontWeight.bold),
+                                            child: Text(
+                                              "Colegio de Estudios",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
                                             ),
-                                          ), 
+                                          ),
                                           Center(
-                                            child: Text("${snap.data[index].colegio}", textAlign: TextAlign.center,),
-                                          ), 
+                                            child: Text(
+                                              "${snap.data[index].colegio}",
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
                                           Center(
-                                            child: Text.rich(TextSpan( 
-                                              children: <TextSpan>[
-                                                TextSpan(text: 'Entrada:', style: TextStyle(fontWeight: FontWeight.bold)),
-                                                TextSpan(text: snap.data[index].entradaInit),
-                                                TextSpan(text: ' Tolerancia:', style: TextStyle(fontWeight: FontWeight.bold)),
-                                                TextSpan(text: snap.data[index].entradaTolerancia),
-                                                
-                                              ]
-                                            )),
-                                          ), 
+                                            child: Text.rich(
+                                                TextSpan(children: <TextSpan>[
+                                              TextSpan(
+                                                  text: 'Entrada:',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              TextSpan(
+                                                  text: snap
+                                                      .data[index].entradaInit),
+                                              TextSpan(
+                                                  text: ' Tolerancia:',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              TextSpan(
+                                                  text: snap.data[index]
+                                                      .entradaTolerancia),
+                                            ])),
+                                          ),
                                           Center(
-                                            child: Text.rich(TextSpan(
-                                              children: <TextSpan>[
-                                                TextSpan(text: 'Salida:', style: TextStyle(fontWeight: FontWeight.bold)),
-                                                TextSpan(text: snap.data[index].salidaInit),
-                                                TextSpan(text: ' Tolerancia:', style: TextStyle(fontWeight: FontWeight.bold)),
-                                                TextSpan(text: snap.data[index].salidaTolerancia),
-                                                
-                                              ]
-                                            )),
-                                          ), 
+                                            child: Text.rich(
+                                                TextSpan(children: <TextSpan>[
+                                              TextSpan(
+                                                  text: 'Salida:',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              TextSpan(
+                                                  text: snap
+                                                      .data[index].salidaInit),
+                                              TextSpan(
+                                                  text: ' Tolerancia:',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              TextSpan(
+                                                  text: snap.data[index]
+                                                      .salidaTolerancia),
+                                            ])),
+                                          ),
                                           Center(
-                                            child: Text.rich(TextSpan(
-                                              children: <TextSpan>[
-                                                TextSpan(text: 'Correo:', style: TextStyle(fontWeight: FontWeight.bold)),
-                                                TextSpan(text: snap.data[index].correo),
-                                                
-                                              ]
-                                            )),
-                                          ), 
-                                          
+                                            child: Text.rich(
+                                                TextSpan(children: <TextSpan>[
+                                              TextSpan(
+                                                  text: 'Correo:',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              TextSpan(
+                                                  text:
+                                                      snap.data[index].correo),
+                                            ])),
+                                          ),
                                           Center(
-                                            child: FlatButton(onPressed: (){
-                                              showDialog(context: context, builder: (context){
-                                                return Center(
-                                                  child: SizedBox(
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.white
-                                                      ),
-                                                      child: QrImage(
-                                                        version: 3,
-                                                        data: snap.data[index].id.toString()),
-                                                    ),
-                                                  ),
-                                                );
-                                              });
-                                            }, child: Text("Generar QR"), shape: StadiumBorder(), color: Colors.greenAccent,),
+                                            child: FlatButton(
+                                              onPressed: () {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return Center(
+                                                        child: SizedBox(
+                                                          child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                                    color: Colors
+                                                                        .white),
+                                                            child: QrImage(
+                                                                version: 3,
+                                                                data: snap
+                                                                    .data[index]
+                                                                    .id
+                                                                    .toString()),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    });
+                                              },
+                                              child: Text("Generar QR"),
+                                              shape: StadiumBorder(),
+                                              color: Colors.greenAccent,
+                                            ),
+                                          ),
+                                          Center(
+                                            child: FlatButton(
+                                                onPressed: null,
+                                                child: Text(
+                                                    "Seleccionar ubicacion")),
                                           )
-
                                         ],
                                       )
                                     ],
@@ -152,9 +192,9 @@ class PageAlumno extends StatelessWidget {
           }),
       // backgroundColor: Colors.transparent,
       floatingActionButton: FloatingActionButton(
-      
         onPressed: () {
-          Navigator.push(context,MaterialPageRoute(builder: (context) => AddChildAlumno()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => AddChildAlumno()));
         },
         child: Icon(Icons.person_add),
       ),
@@ -175,21 +215,21 @@ class PageAlumno extends StatelessWidget {
 
     List<Hijo> hijos = [];
     if (response.statusCode == 200) {
-    var responseJson = json.decode(utf8.decode(response.bodyBytes));
-    for (var item in responseJson) {
-      Hijo hijo = Hijo(
-          item['id'],
-          item['al_nombres'],
-          item['al_apellidos'],
-          item['al_foto'],
-          item['al_correo'],
-          item['al_colegio'],
-          item['al_entrada_init'],
-          item['al_entrada_end'],
-          item['al_salida_init'],
-          item['al_dalida_end']);
-      hijos.add(hijo);
-    }
+      var responseJson = json.decode(utf8.decode(response.bodyBytes));
+      for (var item in responseJson) {
+        Hijo hijo = Hijo(
+            item['id'],
+            item['al_nombres'],
+            item['al_apellidos'],
+            item['al_foto'],
+            item['al_correo'],
+            item['al_colegio'],
+            item['al_entrada_init'],
+            item['al_entrada_end'],
+            item['al_salida_init'],
+            item['al_dalida_end']);
+        hijos.add(hijo);
+      }
     }
     return hijos;
   }

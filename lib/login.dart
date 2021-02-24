@@ -146,7 +146,10 @@ class FormLoginViewState extends State<FormLoginView> {
                             json.decode(response.body);
                         tokenJson = responseJson['token'];
                         guardarToken();
-                        Navigator.push(context,MaterialPageRoute(builder: (context) => Home()));
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => Home()),
+                            (route) => false);
                       }
                     }
                   },
@@ -204,6 +207,7 @@ registernavigateview(BuildContext context) async {
   final result = await Navigator.push(
       context, MaterialPageRoute(builder: (context) => CreateUser()));
 }
+
 qrScanAlumno(BuildContext context) async {
   final result = await Navigator.push(
       context, MaterialPageRoute(builder: (context) => QrScan()));
