@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:provider/provider.dart';
 import 'package:scholarguardian/pages/pageprofile.dart';
+import 'package:scholarguardian/provider/obj_provider.dart';
 
 import 'pages/pageEvent.dart';
 import 'pages/pageLocation.dart';
@@ -10,9 +12,10 @@ import 'pages/pagealumno.dart';
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: BottomNavBar(),);
+    return Scaffold(
+      body: BottomNavBar(),
+    );
   }
-  
 }
 
 class BottomNavBar extends StatefulWidget {
@@ -29,26 +32,26 @@ class _BottomNavBarState extends State<BottomNavBar> {
   final PageProfile profile = PageProfile();
   GlobalKey _bottomNavigationKey = GlobalKey();
   Widget _showPage = PageProfile();
-  Widget _pageChooser(int page){
+  Widget _pageChooser(int page) {
     switch (page) {
       case 0:
-      return alumno;
-      break;
-      
+        return alumno;
+        break;
+
       case 1:
-      return alumnEvent;
-      break;
+        return alumnEvent;
+        break;
 
       case 2:
-      return location;
-      break;
+        return location;
+        break;
 
       case 3:
-      return paystatus;
-      break;
+        return paystatus;
+        break;
 
       case 4:
-        return profile;        
+        return profile;
         break;
       default:
     }
@@ -56,6 +59,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
+    final usuarioprovider = Provider.of<UserProvider>(context);
+    setState(() {});
     return Scaffold(
         bottomNavigationBar: CurvedNavigationBar(
           key: _bottomNavigationKey,
@@ -70,7 +75,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           ],
           color: Colors.white,
           buttonBackgroundColor: Colors.white,
-          backgroundColor: Colors.white, 
+          backgroundColor: Colors.white,
           animationCurve: Curves.easeInOut,
           animationDuration: Duration(milliseconds: 600),
           onTap: (index) {
@@ -81,9 +86,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         ),
         body: Container(
           color: Colors.greenAccent,
-          child: Center(
-            child: _showPage
-          ),
+          child: Center(child: _showPage),
         ));
   }
 }

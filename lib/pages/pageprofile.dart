@@ -2,20 +2,27 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:scholarguardian/login/homeAlumno.dart';
 import 'package:scholarguardian/obj/objs.dart';
 import 'package:scholarguardian/constantes.dart' as constantes;
 import 'package:http/http.dart' as http;
 import 'package:scholarguardian/obj/tokensesion.dart';
 import 'package:scholarguardian/login.dart';
+import 'package:scholarguardian/pages/inter_pages/edit_profile.dart';
+import 'package:scholarguardian/provider/obj_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PageProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Perfil"),),
+      appBar: AppBar(
+        title: Text("Perfil"),
+      ),
       body: ProfileWigget(),
-      );
+    );
   }
 }
 
@@ -27,47 +34,9 @@ class ProfileWigget extends StatefulWidget {
 }
 
 class ProfileWiggetState extends State<ProfileWigget> {
-  ObjUser objuser = ObjUser();
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: profileWiget(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.greenAccent),
-              ),
-            );
-          } else {
-            return snapshot.data;
-          }
-        });
-  }
-
-  Future<Widget> profileWiget() async {
-    String token = "";
-    await getTokenUser().then((val) {
-      token = val;
-    });
-
-    var url = constantes.URL_SERVER + 'ctr/app/v1/app/get/user/info/';
-    final response = await http.get(url, headers: {
-      HttpHeaders.authorizationHeader: 'Token $token',
-      HttpHeaders.contentTypeHeader: 'application/json',
-    });
-    if (response.statusCode == 200) {
-      Map<String, dynamic> responseJson =
-          json.decode(utf8.decode(response.bodyBytes));
-      objuser.nombre = responseJson['first_name'];
-      objuser.apellido = responseJson['last_name'];
-      objuser.email = responseJson['email'];
-      objuser.fechanacimiento =
-          formatJsontoString(responseJson['fecha_nacimiento']);
-      objuser.telefono = formatJsontoString(responseJson['telefono']);
-      objuser.fotoperfil = formatJsontoStringurl(responseJson['foto_perfil']);
-      objuser.usuario = responseJson['username'];
-    }
+    final usuarioprovider = Provider.of<UserProvider>(context);
 
     return ListView(
       children: <Widget>[
@@ -80,7 +49,8 @@ class ProfileWiggetState extends State<ProfileWigget> {
               child: Image(
                   width: MediaQuery.of(context).size.width,
                   fit: BoxFit.contain,
-                  image: NetworkImage(objuser.fotoperfil)),
+                  image: NetworkImage(
+                      formatJsontoStringurl('${usuarioprovider.fotoperfil}'))),
             ),
             Positioned(
                 bottom: 50,
@@ -89,7 +59,7 @@ class ProfileWiggetState extends State<ProfileWigget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      objuser.nombre,
+                      '${usuarioprovider.firstname}',
                       style: TextStyle(
                           fontSize: 30,
                           color: Colors.white,
@@ -101,7 +71,7 @@ class ProfileWiggetState extends State<ProfileWigget> {
                           ]),
                     ),
                     Text(
-                      objuser.apellido,
+                      '${usuarioprovider.lastname}',
                       style: TextStyle(
                           fontSize: 30,
                           color: Colors.white,
@@ -115,22 +85,22 @@ class ProfileWiggetState extends State<ProfileWigget> {
                   ],
                 )),
             Positioned(
-                bottom: -25,
+                bottom: 0,
                 left: MediaQuery.of(context).size.width / 10,
-                child: FlatButton(
-                  onPressed: () {},
-                  child: Text(
-                    "Configuraciones",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                  color: Color(0xFF00b8d4),
-                  shape: StadiumBorder(),
-                )),
+                child: IconButton(
+                    icon: Icon(Icons.edit),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EditProfileUser()));
+                    })),
           ],
         ),
         Container(
           decoration: BoxDecoration(
-              color: Color(0xFF62eaff), borderRadius: BorderRadius.circular(13)),
+              color: Color(0xFF62eaff),
+              borderRadius: BorderRadius.circular(13)),
           margin: EdgeInsets.only(top: 30, left: 10, right: 10),
           padding: EdgeInsets.only(top: 20, bottom: 20),
           child: Column(
@@ -152,7 +122,7 @@ class ProfileWiggetState extends State<ProfileWigget> {
                         Padding(
                           padding: EdgeInsets.only(left: 30),
                           child: Text(
-                            objuser.telefono,
+                            '${usuarioprovider.telefono}',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -169,7 +139,7 @@ class ProfileWiggetState extends State<ProfileWigget> {
                           style: TextStyle(fontSize: 13),
                         ),
                         Text(
-                          objuser.fechanacimiento,
+                          '${usuarioprovider.fechanacimiento}',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -190,14 +160,13 @@ class ProfileWiggetState extends State<ProfileWigget> {
                             padding: EdgeInsets.only(left: 30),
                             child: Text(
                               "Email",
-                              style:
-                                  TextStyle(fontSize: 13),
+                              style: TextStyle(fontSize: 13),
                             ),
                           ),
                           Padding(
                             padding: EdgeInsets.only(left: 30),
                             child: Text(
-                              objuser.email,
+                              '${usuarioprovider.email}',
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
@@ -214,7 +183,7 @@ class ProfileWiggetState extends State<ProfileWigget> {
                             style: TextStyle(fontSize: 13),
                           ),
                           Text(
-                            "Basico",
+                            "${usuarioprovider.tipouser}",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -226,16 +195,20 @@ class ProfileWiggetState extends State<ProfileWigget> {
               Padding(
                 padding: EdgeInsets.only(top: 15),
                 child: FlatButton(
-                  onPressed: () {
-                    Navigator.push(context,MaterialPageRoute(builder: (context) => LoginView()));
-                    // Navigator.push(context,MaterialPageRoute(builder: (context) => HomeAlumno()));
-                  }, 
-                  child: Text("Salir", 
-                  style: TextStyle(color: Colors.black),),
+                  onPressed: () async {
+                    SharedPreferences preferencias =
+                        await SharedPreferences.getInstance();
+                    preferencias.clear();
+                    SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                  },
+                  child: Text(
+                    "Salir",
+                    style: TextStyle(color: Colors.black),
+                  ),
                   shape: StadiumBorder(),
                   color: Color(0xFF00b8d4),
                 ),
-              )
+              ),
             ],
           ),
         )
@@ -253,7 +226,7 @@ String formatJsontoString(String data) {
 }
 
 String formatJsontoStringurl(String data) {
-  if (data == null) {
+  if (data == 'no') {
     return "https://pecb.com/conferences/wp-content/uploads/2017/10/no-profile-picture.jpg";
   } else {
     return constantes.URL_SERVER_RAW + data;

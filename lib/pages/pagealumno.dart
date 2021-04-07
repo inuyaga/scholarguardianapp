@@ -1,19 +1,32 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:scholarguardian/obj/tokensesion.dart';
 import 'package:scholarguardian/constantes.dart' as constantes;
 import 'package:http/http.dart' as http;
 
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:scholarguardian/pages/addChildAlumno.dart';
+import 'package:scholarguardian/provider/obj_provider.dart';
 
-class PageAlumno extends StatelessWidget {
+class PageAlumno extends StatefulWidget {
+  @override
+  _PageAlumnoState createState() => _PageAlumnoState();
+}
+
+class _PageAlumnoState extends State<PageAlumno> {
+  Token objtoken;
   @override
   Widget build(BuildContext context) {
+    Future onGoBack(dynamic value) {
+      setState(() {});
+    }
+
+    objtoken = Provider.of<Token>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Alumnos"),
+        title: Text("Alumnos ${objtoken.codigo}"),
         // backgroundColor: Colors.transparent,
       ),
       body: FutureBuilder(
@@ -194,7 +207,8 @@ class PageAlumno extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AddChildAlumno()));
+                  MaterialPageRoute(builder: (context) => AddChildAlumno()))
+              .then((onGoBack));
         },
         child: Icon(Icons.person_add),
       ),

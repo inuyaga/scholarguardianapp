@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:scholarguardian/obj/objs.dart';
 import 'package:scholarguardian/obj/tokensesion.dart';
 import 'package:scholarguardian/constantes.dart' as constantes;
@@ -11,6 +12,7 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:scholarguardian/provider/obj_provider.dart';
 
 class AddChildAlumno extends StatefulWidget {
   @override
@@ -25,25 +27,21 @@ class AddChildAlumnoState extends State<AddChildAlumno> {
 
   ProgressDialog pr;
   Future<File> file;
+  File tmpFile;
   String status = '';
   String base64Image;
-  File tmpFile;
   String errMessage = 'Error Uploading Image';
   String seleccion = '0';
+  final _formKey = GlobalKey<FormState>();
 
-  setselection(String val){
+  setselection(String val) {
     seleccion = val;
     print(seleccion);
   }
 
-
-  
   @override
   Widget build(BuildContext context) {
     pr = new ProgressDialog(context);
-    final _formKey = GlobalKey<FormState>();
-    
-    
 
     return Scaffold(
         appBar: AppBar(
@@ -111,8 +109,9 @@ class AddChildAlumnoState extends State<AddChildAlumno> {
                     ),
                   )),
                   Center(
-                    child: SelectedColegioWidget(parentAction: setselection,),
-                  ),
+                      child: SelectedColegioWidget(
+                    parentAction: setselection,
+                  )),
                   Center(
                       child: Padding(
                     padding: EdgeInsets.only(left: 40, right: 40),
@@ -229,8 +228,8 @@ class AddChildAlumnoState extends State<AddChildAlumno> {
                             await getTokenUser().then((val) {
                               token = val;
                             });
-                            var url = constantes.URL_SERVER +
-                                'ctr/app/v1/app/add/alumnos/';
+                            var url =
+                                '${constantes.URL_SERVER}ctr/app/v1/app/add/alumnos/';
                             final response = await http.post(url, headers: {
                               HttpHeaders.authorizationHeader: 'Token $token',
                             }, body: {
@@ -327,59 +326,21 @@ class AddChildAlumnoState extends State<AddChildAlumno> {
       },
     );
   }
-
-  
 }
 
-
-
-
-
-
-
-
-
-
-
-class SelectedColegioWidget extends StatefulWidget{
+class SelectedColegioWidget extends StatefulWidget {
   final ValueChanged<String> parentAction;
   const SelectedColegioWidget({Key key, this.parentAction}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return SelectedColegioWidgetState();
   }
-
 }
 
-
-class SelectedColegioWidgetState extends State<SelectedColegioWidget>{
+class SelectedColegioWidgetState extends State<SelectedColegioWidget> {
   String selected = "1";
-  @override
-  Widget build(BuildContext context) {
-    return selectedColegio();
-  }
-
- 
-
-  Future<List<Colegio>> listColegiosGet() async {
-    String token = "";
-    await getTokenUser().then((val) {
-      token = val;
-    });
-    var url = constantes.URL_SERVER + 'ctr/app/v1/app/colegios/list/';
-    final response = await http.get(url, headers: {
-      HttpHeaders.authorizationHeader: 'Token $token',
-    });
-    List<Colegio> _colegios = [];
-    if (response.statusCode == 200) {
-      final jsontxt = JsonDecoder().convert(utf8.decode(response.bodyBytes));
-      _colegios = (jsontxt).map<Colegio>((item) => Colegio.fromJson(item)).toList();
-      widget.parentAction(selected);
-      return _colegios;
-    } else {
-      return _colegios;
-    }
-  }
+  Future<List<Colegio>> _futureColegios;
+  Token tken;
 
   changue(String valor) {
     setState(() {
@@ -388,12 +349,39 @@ class SelectedColegioWidgetState extends State<SelectedColegioWidget>{
     });
   }
 
-  Widget selectedColegio() {
+  @override
+  void initState() {
+    super.initState();
+    tken = Provider.of<Token>(context, listen: false);
+    _futureColegios = listColegiosGet();
+  }
+
+  Future<List<Colegio>> listColegiosGet() async {
+    var url = constantes.URL_SERVER + 'ctr/app/v1/app/colegios/list/';
+    final response = await http.get(url, headers: {
+      HttpHeaders.authorizationHeader: 'Token ${tken.codigo}',
+    });
+    List<Colegio> _colegios = [];
+    if (response.statusCode == 200) {
+      final jsontxt = JsonDecoder().convert(utf8.decode(response.bodyBytes));
+      _colegios =
+          (jsontxt).map<Colegio>((item) => Colegio.fromJson(item)).toList();
+      widget.parentAction(selected);
+      return _colegios;
+    } else {
+      return _colegios;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return FutureBuilder(
-        future: listColegiosGet(),
+        future: _futureColegios,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (!snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return Text("Loanding data");
+          } else if (snapshot.hasError) {
+            return new Text('Error: ${snapshot.error}');
           } else {
             List<DropdownMenuItem<String>> menu = [];
             for (var item in snapshot.data) {
@@ -408,5 +396,4 @@ class SelectedColegioWidgetState extends State<SelectedColegioWidget>{
           }
         });
   }
-  
 }

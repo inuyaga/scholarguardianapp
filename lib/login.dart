@@ -2,6 +2,9 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:scholarguardian/obj/objs.dart';
+import 'package:scholarguardian/provider/obj_provider.dart';
 import 'constantes.dart' as constantes;
 import 'createuser.dart';
 import 'dart:convert';
@@ -50,9 +53,13 @@ class FormLoginViewState extends State<FormLoginView> {
   String token;
   String tokenJson;
   int conteo = 0;
-
+  ObjUser user;
+  var usuarioprovider;
+  Token objToken;
   @override
   Widget build(BuildContext context) {
+    usuarioprovider = Provider.of<UserProvider>(context);
+    objToken = Provider.of<Token>(context);
     return Form(
         key: _formKey,
         child: Center(
@@ -141,11 +148,16 @@ class FormLoginViewState extends State<FormLoginView> {
                           constantes.URL_SERVER + 'ctr/app/v1/app/login2/';
                       var response = await http.post(url,
                           body: {'username': usuario, 'password': pass});
+
                       if (response.statusCode == 200) {
                         Map<String, dynamic> responseJson =
                             json.decode(response.body);
                         tokenJson = responseJson['token'];
-                        guardarToken();
+                        user = ObjUser.fromJson(responseJson['usuario']);
+                        print(tokenJson);
+                        guardarToken(
+                            token: tokenJson,
+                            userJson: json.encode(responseJson['usuario']));
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(builder: (context) => Home()),
@@ -197,9 +209,22 @@ class FormLoginViewState extends State<FormLoginView> {
         ));
   }
 
-  void guardarToken() async {
+  void guardarToken({String token, String userJson}) async {
     SharedPreferences preferencias = await SharedPreferences.getInstance();
-    preferencias.setString("token", tokenJson);
+    preferencias.setString("token", token);
+    preferencias.setString("userJson", userJson);
+    // String userJsonget = preferencias.getString("userJson") ?? "";
+    ObjUser user = ObjUser.fromJson(json.decode(userJson));
+    usuarioprovider.id = user.id;
+    usuarioprovider.username = user.username;
+    usuarioprovider.firstname = user.firstname;
+    usuarioprovider.lastname = user.lastname;
+    usuarioprovider.email = user.email;
+    usuarioprovider.fotoperfil = user.fotoperfil;
+    usuarioprovider.fechanacimiento = user.fechanacimiento;
+    usuarioprovider.telefono = user.telefono;
+    usuarioprovider.tipouser = user.tipouser;
+    objToken.codigo = token;
   }
 }
 
